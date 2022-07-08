@@ -1,10 +1,10 @@
 import numpy
 import numpy as np
 import torch
-from torch import nn, optim
+from torch import nn
 from torch.utils.data import DataLoader
+
 from net import Net
-from dataset import TrafficLightDataset
 
 if __name__ == '__main__':
     cuda_available = torch.cuda.is_available()

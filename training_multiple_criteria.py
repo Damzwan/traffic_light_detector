@@ -1,11 +1,8 @@
-import csv
-
-import numpy as np
 import torch
-from torch import nn, optim
+from torch import nn
 from torch.utils.data import DataLoader
+
 from dataset import TrafficLightDataset
-from example_yolo import MobileNet
 from net import Net
 
 if __name__ == '__main__':

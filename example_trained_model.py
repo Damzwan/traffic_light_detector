@@ -1,8 +1,5 @@
-import numpy as np
 import torch
 import torchvision
-from PIL import Image, ImageOps
-from matplotlib import pyplot as plt
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision.utils import draw_bounding_boxes
@@ -14,7 +11,7 @@ if __name__ == '__main__':
     BATCH_SIZE = 1
 
     model = Net(2)
-    model.load_state_dict(torch.load('model2.pth'))
+    model.load_state_dict(torch.load('saved/model2.pth'))
     model.eval()
 
     test_path = 'ModelDataSplit/test'
@@ -40,8 +37,6 @@ if __name__ == '__main__':
         img = draw_bounding_boxes(img, box_output, width=5,
                                   colors="green",
                                   fill=True)
-
-
 
         img = torchvision.transforms.ToPILImage()(img)
         img.show()
