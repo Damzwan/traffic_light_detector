@@ -1,34 +1,16 @@
-import torch
 from torch import nn
+from torchvision.io.image import read_image
+from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_ResNet50_FPN_V2_Weights
+from torchvision.utils import draw_bounding_boxes
+from torchvision.transforms.functional import to_pil_image
+import torch
 from PIL import Image
-from torchvision.io import read_image
-from torchvision.transforms import transforms
 
+img = read_image('dataset/heon_IMG_0563.JPG')
+model = torch.hub.load('ultralytics/yolov5', 'yolov5m', pretrained=True)
+im1 = Image.open('dataset/heon_IMG_0611.JPG')
 
-class MobileNet(nn.Module):
-    def __init__(self, n_class=2):
-        super(MobileNet, self).__init__()
+results = model(im1)
 
-        self.pretrained_model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True)
-        self.pretrained_model.training = False
-
-        # Freeze parameters
-        for param in self.pretrained_model.parameters():
-            param.requires_grad = False
-
-        self.stoplight_classifier = nn.Sequential(nn.Linear(1280, 160),
-                                                  nn.BatchNorm1d(160),
-                                                  nn.ReLU6(inplace=True),
-                                                  nn.Linear(160, n_class),
-                                                  nn.Softmax()
-                                                  )
-
-        self.box_predictor = nn.Sequential(nn.Linear(1280, 80),
-                                           nn.BatchNorm1d(80),
-                                           nn.ReLU6(inplace=True),
-                                           nn.Linear(80, 4))
-
-    def forward(self, x):
-        x = self.pretrained_model.features(x)
-        x = x.mean(3).mean(2)
-        return self.stoplight_classifier(x), self.box_predictor(x)
+results.print()
+results.show()
